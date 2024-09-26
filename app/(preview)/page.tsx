@@ -4,13 +4,14 @@
 import {
   BotIcon,
   SchoolIcon,
-  UserIcon
+  UserIcon,
+  SendIcon,
+  AddImageIcon,
 } from "@/components/icons";
 import { useChat } from "ai/react";
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
-import Link from "next/link";
 import { Markdown } from "@/components/markdown";
 
 const getTextFromDataUrl = (dataUrl: string) => {
@@ -130,7 +131,6 @@ export default function Home() {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* <div onClick={() => navigator.clipboard.writeText(messages.join("\n"))}> */}
       <AnimatePresence>
         {isDragging && (
           <motion.div
@@ -139,7 +139,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div>Drag and drop files here</div>
+            <div>Arrastre y suelte los archivos aquí</div>
             <div className="text-sm dark:text-zinc-400 text-zinc-500">
               {"(images and text)"}
             </div>
@@ -217,7 +217,7 @@ export default function Home() {
         )}
 
         <form
-          className="flex flex-col gap-2 relative items-center pb-4"
+          className="flex flex-col relative items-center pb-4"
           onSubmit={(event) => {
             const options = files ? { experimental_attachments: files } : {};
             handleSubmit(event, options);
@@ -267,27 +267,148 @@ export default function Home() {
               </div>
             )}
           </AnimatePresence>
-          <input
-            type="file"
-            onChange={event => {
-              if (event.target.files) {
-                setFiles(event.target.files);
+          <div className="messageBox">
+            <div className="fileUploadWrapper">
+              <label htmlFor="file">
+                <AddImageIcon />
+                <span className="tooltip">Adjunta una imagen</span>
+              </label>
+              <input type="file" id="file" name="file"
+                onChange={event => {
+                  if (event.target.files) {
+                    setFiles(event.target.files);
+                  }
+                }}
+                multiple
+                ref={fileInputRef}
+              />
+              <input placeholder="Haz tu pregunta..." type="text" id="messageInput"
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                onPaste={handlePaste}
+              />
+            </div>
+            <button id="sendButton">
+              <SendIcon />
+            </button>
+            <style>
+              {`
+              .messageBox {
+                width: 340px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #2d2d2d;
+                padding: 0 15px;
+                border-radius: 10px;
+                border: 1px solid rgb(63, 63, 63);
               }
-            }}
-            multiple
-            ref={fileInputRef}
-          />
-          <input
-            ref={inputRef}
-            className="bg-zinc-100 rounded-md px-2 py-1.5 w-full outline-none dark:bg-zinc-700 text-zinc-800 dark:text-zinc-300 md:max-w-[500px] max-w-[calc(100dvw-32px)]"
-            placeholder="Send a message..."
-            value={input}
-            onChange={handleInputChange}
-            onPaste={handlePaste}
-          />
+              .messageBox:focus-within {
+                border: 1px solid rgb(110, 110, 110);
+              }
+              .fileUploadWrapper {
+                width: fit-content;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: Arial, Helvetica, sans-serif;
+              }
+
+              #file {
+                display: none;
+              }
+              .fileUploadWrapper label {
+                cursor: pointer;
+                width: fit-content;
+                height: fit-content;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+              }
+              .fileUploadWrapper label svg {
+                height: 18px;
+              }
+              .fileUploadWrapper label svg path {
+                transition: all 0.3s;
+              }
+              .fileUploadWrapper label svg circle {
+                transition: all 0.3s;
+              }
+              .fileUploadWrapper label:hover svg path {
+                stroke: #fff;
+              }
+              .fileUploadWrapper label:hover svg circle {
+                stroke: #fff;
+                fill: #3c3c3c;
+              }
+              .fileUploadWrapper label:hover .tooltip {
+                display: block;
+                opacity: 1;
+              }
+              .tooltip {
+                position: absolute;
+                top: -40px;
+                display: none;
+                opacity: 0;
+                color: white;
+                font-size: 10px;
+                text-wrap: nowrap;
+                background-color: #000;
+                padding: 6px 10px;
+                border: 1px solid #3c3c3c;
+                border-radius: 5px;
+                box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.596);
+                transition: all 0.3s;
+              }
+              #messageInput {
+                width: 250px;
+                height: 100%;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                padding-left: 10px;
+                color: white;
+                text-align: left;
+              }
+              #messageInput:focus ~ #sendButton svg path,
+              #messageInput:valid ~ #sendButton svg path {
+                fill: #3c3c3c;
+                stroke: white;
+              }
+
+              #sendButton {
+                width: fit-content;
+                height: 100%;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s;
+              }
+              #sendButton svg {
+                height: 18px;
+                transition: all 0.3s;
+              }
+              #sendButton svg path {
+                transition: all 0.3s;
+              }
+              #sendButton:hover svg path {
+                fill: #3c3c3c;
+                stroke: white;
+              }
+
+            `}
+            </style>
+          </div>
         </form>
       </div>
-      {/* </div> */}
     </div>
   );
 }
