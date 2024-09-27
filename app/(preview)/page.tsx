@@ -8,11 +8,12 @@ import {
   SendIcon,
   AddImageIcon,
 } from "@/components/icons";
+import { CopyBtn } from "@/components/CopyBtn";
+import { Markdown } from "@/components/markdown";
 import { useChat } from "ai/react";
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
-import { Markdown } from "@/components/markdown";
 
 const getTextFromDataUrl = (dataUrl: string) => {
   const base64 = dataUrl.split(",")[1];
@@ -119,11 +120,6 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  const handleUploadImg = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  }
   return (
     <div
       className="flex flex-row justify-center h-dvh bg-white dark:bg-zinc-900"
@@ -164,7 +160,10 @@ export default function Home() {
 
                 <div className="flex flex-col gap-1">
                   <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-                    <Markdown>{message.content}</Markdown>
+                    <>
+                      <Markdown>{message.content}</Markdown>
+                      {message.role === "assistant" && <CopyBtn clipboardValue={message.content}/>}
+                    </>
                   </div>
                   <div className="flex flex-row gap-2">
                     {message.experimental_attachments?.map((attachment) =>
@@ -210,8 +209,8 @@ export default function Home() {
                 ¡Bienvenida, Bianca!
               </p>
               <p>
-                Soy tu asistente educativo personal, quien resolverá todas tus preguntas y dudas sobre diferentes materias escolares. 
-                Mi objetivo es apoyarte en tu aprendizaje, brindarte explicaciones claras y ayudarte a superar cualquier desafío. 
+                Soy tu asistente educativo personal, quien resolverá todas tus preguntas y dudas sobre diferentes materias escolares.
+                Mi objetivo es apoyarte en tu aprendizaje, brindarte explicaciones claras y ayudarte a superar cualquier desafío.
                 No dudes en preguntarme lo que necesites, ¡estoy aquí para acompañarte!
               </p>
             </div>
