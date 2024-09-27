@@ -206,11 +206,13 @@ export default function Home() {
               <p className="flex flex-row justify-center gap-4 items-center text-zinc-900 dark:text-zinc-50">
                 <SchoolIcon />
               </p>
+              <p className="text-center">
+                ¡Bienvenida, Bianca!
+              </p>
               <p>
-                The useChat hook supports sending attachments along with
-                messages as well as rendering previews on the client. This can
-                be useful for building applications that involve sending images,
-                files, and other media content to the AI provider.
+                Soy tu asistente educativo personal, quien resolverá todas tus preguntas y dudas sobre diferentes materias escolares. 
+                Mi objetivo es apoyarte en tu aprendizaje, brindarte explicaciones claras y ayudarte a superar cualquier desafío. 
+                No dudes en preguntarme lo que necesites, ¡estoy aquí para acompañarte!
               </p>
             </div>
           </motion.div>
